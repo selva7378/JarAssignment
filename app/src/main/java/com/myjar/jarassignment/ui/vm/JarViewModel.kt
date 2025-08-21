@@ -1,5 +1,6 @@
 package com.myjar.jarassignment.ui.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myjar.jarassignment.createRetrofit
@@ -18,9 +19,15 @@ class JarViewModel : ViewModel() {
 
     private val repository: JarRepository = JarRepositoryImpl(createRetrofit())
 
+
+
     fun fetchData() {
         viewModelScope.launch {
-            repository.fetchResults()
+            repository.fetchResults().collect {
+                _listStringData.value = it
+                Log.i("viewmodel", "ItemListScreen: items size = ${_listStringData.value.size}")
+            }
         }
+
     }
 }
